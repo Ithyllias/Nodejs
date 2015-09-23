@@ -1,26 +1,33 @@
 //Dessin d'un disque avec Paper.js
-alert('entered test.js');
-window.onload = function() {
-    // Get a reference to the canvas object
-    var canvas = document.getElementById('cnv');
-    // Create an empty project and a view for the canvas:
-    paper.setup(canvas);
-    // Create a Paper.js Path to draw a line into it:
-    var path = new paper.Path();
-    // Give the stroke a color
-    path.strokeColor = 'black';
-    var start = new paper.Point(100, 100);
-    // Move to start and draw a line from there
-    path.moveTo(start);
-    // Note that the plus operator on Point objects does not work
-    // in JavaScript. Instead, we need to call the add() function:
-    path.lineTo(start.add([ 200, -50 ]));
-    // Draw the view now:
-    paper.view.draw();
-    alert('yo, mama!');
-};
+var path = new Path.Circle({
+    center: view.center,
+    radius: 100,
+    strokeColor: 'black',
+    fillColor: 'black'
+});
+
+function onMouseDown(event) {
+}
+
+function onMouseUp(event) {
+    var vector = event.point - path.position;
+    console.log(vector);
+    //path.position += vector;
+    move(vector);
+}
+
+function move(distance){
+    if(distance.length > 1){
+        console.log("current distance : " + distance.length);
+        path.position += distance / 15;
+        move(distance - (distance / 15));
+    } else {
+        path.position += distance;
+    }
+}
 
 function onResize(event) {
+    console.log("recentering the path.");
     // Whenever the window is resized, recenter the path:
     path.position = view.center;
 }

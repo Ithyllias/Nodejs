@@ -3,6 +3,8 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(rel='javascript', href='/javascripts/draw_test.js')
+    script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.4.min.js')
+    script(type='text/javascript', src='/javascripts/paper.js')
+    script(type='text/paperscript', src='/javascripts/draw_test.js' canvas="cnv")
   body
     block content
