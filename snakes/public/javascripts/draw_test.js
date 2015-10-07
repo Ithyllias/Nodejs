@@ -31,12 +31,10 @@ function onFrame(event){
         for(var i = tail.length - 1; i >= 0; i--){
             var previousSegmentPosition = (i == 0 ? head.position : tail[i-1].position);
             if(Math.abs((tail[i].position - previousSegmentPosition).length) > deltaSegment){
-                //if(Math.abs(tail[0].position - head.position).length > 811){
                     tail[i].position = previousSegmentPosition;
-                //}
             }
         }
-        head.position += vector / 30;
+        head.position += vector / 15;
         if(vector.length <= 3){
               target = null;
         }
