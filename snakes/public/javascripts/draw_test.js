@@ -17,6 +17,7 @@ function onMouseUp(event) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 function onFrame(event){
     if(target != null) {
         var vector = target - head.position;
@@ -31,6 +32,8 @@ function onFrame(event){
               target = null;
         }
 =======
+=======
+>>>>>>> parent of f204681... creation dun serpent qui se deplace graduellement plutot quinstantanement comme avant. Problemes pour faire suivre sa queue de facon normale
 function move(distance){
     if(distance.length > 1){
         console.log("current distance : " + distance.length);
@@ -38,6 +41,9 @@ function move(distance){
         move(distance - (distance / 15));
     } else {
         path.position += distance;
+<<<<<<< HEAD
+>>>>>>> parent of f204681... creation dun serpent qui se deplace graduellement plutot quinstantanement comme avant. Problemes pour faire suivre sa queue de facon normale
+=======
 >>>>>>> parent of f204681... creation dun serpent qui se deplace graduellement plutot quinstantanement comme avant. Problemes pour faire suivre sa queue de facon normale
     }
 }
