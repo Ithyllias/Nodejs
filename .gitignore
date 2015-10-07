@@ -6,7 +6,7 @@
 *.user
 *.sln.docstates
 certrequest.csr
-privatekey.pem
+*.pem
 
 # Build results
 
