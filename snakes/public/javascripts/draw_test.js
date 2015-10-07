@@ -16,14 +16,10 @@ for (var i = 0; i < 10; i++){
     });
 }
 
-var deltaSegment = Math.abs((tail[1].position - tail[0].position).length);
-
 var target;
 
 function onMouseDown(event) {
     target = event.point;
-    //var vector = target - head.position;
-    //head.rotate((vector.angle > 180 ? vector.angle : -(vector.angle)));
 
     var tailCenters = [];
     for(var i=0; i < tail.length; i++){
@@ -34,32 +30,16 @@ function onMouseDown(event) {
 }
 
 socket.on('instruction',function(instruction){
-    var temp = instruction.newSnake;
+   var temp = instruction.newSnake;
    console.log("received instruction for head -> x : " + temp.head.x + " y : " + temp.head.y);
-    head.position = new Point(temp.head.x, temp.head.y);
+   head.position = new Point(temp.head.x, temp.head.y);
    console.log("received instruction for tail : ");
    temp.tail.forEach(function(part){
+       console.log("before -> " + part.index + " x : " + tail[part.index].position._x + " y : " + tail[part.index].position._y);
        tail[part.index].position = new Point(part.x, part.y);
-       console.log("x : " + part.x + " y : " + part.y);
+       console.log(part.index + " x : " + part.x + " y : " + part.y);
    });
-
 });
-
-//function onFrame(event){
-//    if(target != null) {
-//        var vector = target - head.position;
-//        for(var i = tail.length - 1; i >= 0; i--){
-//            var previousSegmentPosition = (i == 0 ? head.position : tail[i-1].position);
-//            if(Math.abs((tail[i].position - previousSegmentPosition).length) > deltaSegment){
-//                tail[i].position = previousSegmentPosition;
-//            }
-//        }
-//        head.position += vector / 15;
-//        if(vector.length <= 3){
-//            target = null;
-//        }
-//    }
-//}
 
 function onResize(event) {
     console.log("recentering the path.");

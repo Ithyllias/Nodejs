@@ -104,17 +104,19 @@ io.on('connection', function(socket) {
             if(vector.length > 3)
             {
                 var newTail = [];
+                console.log(snake.tail.length);
                 for(var i = snake.tail.length - 1; i >= 0; i--){
                     //Part of the snake that comes before the current one
                     var previousSegmentPosition = (i == 0 ? snake.head : snake.tail[i-1]);
-                    //Vector representing the distance between 2 centers of snake parts
-                    //var snakePartsVector = {x:(snake.tail[i].x - previousSegmentPosition.x),y:(snake.tail[i].y - previousSegmentPosition.y)};
-                    //snakePartsVector.length = Math.sqrt(snakePartsVector.x * snakePartsVector.x + snakePartsVector.y * snakePartsVector.y);
 
-                    //if(snakePartsVector.length > 0){
-                        newTail[i] = {x:previousSegmentPosition.x, y:previousSegmentPosition.y, index:i};
-                    //}
+                    //Creation of new tail coords to send over to client
+                    newTail[i] = {x:previousSegmentPosition.x, y:previousSegmentPosition.y, index:i};
+                    //Update of old tail coordinates into new ones
+                    //TODO snake.tail[i-1].
                 }
+
+                console.log(newTail.length);
+
                 snake.head.x += vector.x / 30;
                 snake.head.y += vector.y / 30;
                 vector.length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
