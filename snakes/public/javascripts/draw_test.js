@@ -1,30 +1,22 @@
 //Dessin d'un disque avec Paper.js
-var head = new Path.RegularPolygon(new Point(80, 70), 3, 50);
-head.fillColor = 'black';
-head.strokeColor = 'black';
-head.center = view.center;
-head.smooth();
-
-var tail = [];
-for (var i = 0; i < 10; i++){
-    tail[i] = new Path.Circle({
-        center: (tail.length <= 0 ? new Point(head.center._x, head.center._y + 25) : new Point(tail[i -1].position.x, tail[i -1].position.y + 25)),
-        radius: 25,
-        strokeColor: 'black',
-        fillColor: 'black'
-    });
-}
-
-var deltaSegment = Math.abs((tail[1].position - tail[0].position).length);
-
-var target;
+var path = new Path.Circle({
+    center: view.center,
+    radius: 100,
+    strokeColor: 'black',
+    fillColor: 'black'
+});
 
 function onMouseDown(event) {
-    target = event.point;
-    var vector = target - head.position;
-    head.rotate((vector.angle > 180 ? vector.angle : -(vector.angle)));
 }
 
+function onMouseUp(event) {
+    var vector = event.point - path.position;
+    console.log(vector);
+    //path.position += vector;
+    move(vector);
+}
+
+<<<<<<< HEAD
 function onFrame(event){
     if(target != null) {
         var vector = target - head.position;
@@ -38,10 +30,20 @@ function onFrame(event){
         if(vector.length <= 3){
               target = null;
         }
+=======
+function move(distance){
+    if(distance.length > 1){
+        console.log("current distance : " + distance.length);
+        path.position += distance / 15;
+        move(distance - (distance / 15));
+    } else {
+        path.position += distance;
+>>>>>>> parent of f204681... creation dun serpent qui se deplace graduellement plutot quinstantanement comme avant. Problemes pour faire suivre sa queue de facon normale
     }
 }
 
 function onResize(event) {
     console.log("recentering the path.");
-    head.position = view.center;
+    // Whenever the window is resized, recenter the path:
+    path.position = view.center;
 }
