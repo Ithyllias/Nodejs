@@ -29,6 +29,20 @@ function SnakeStorage(){
         }
         return false;
     };
+    /*
+     * This function will update all the snakes in the storage.
+     * Argument format : {ownerId : id, direction : direction}
+     */
+    this.update = function(){
+        arguments.forEach(function(arg){
+            if(this.storage.contains(arg.ownderId)){
+                //TODO modify the direction of the snake
+            }
+        });
+        this.storage.forEach(function(storedItem){
+            storedItem.snake.update();
+        });
+    };
 }
 
 module.exports.SnakeStorage = SnakeStorage;
