@@ -101,10 +101,9 @@ io.on('connection', function(socket) {
         var movingSnake = setInterval(function(){
             var vector = {x :(snake.target.x - snake.head.x),y :(snake.target.y - snake.head.y)};
             vector.length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-            if(vector.length > 3)
-            {
+            //if(vector.length > 3)
+            //{
                 var newTail = [];
-                console.log(snake.tail.length);
                 for(var i = snake.tail.length - 1; i >= 0; i--){
                     //Part of the snake that comes before the current one
                     var previousSegmentPosition = (i == 0 ? snake.head : snake.tail[i-1]);
@@ -112,21 +111,22 @@ io.on('connection', function(socket) {
                     //Creation of new tail coords to send over to client
                     newTail[i] = {x:previousSegmentPosition.x, y:previousSegmentPosition.y, index:i};
                     //Update of old tail coordinates into new ones
-                    //TODO snake.tail[i-1].
+                    snake.tail[i].x = previousSegmentPosition.x;
+                    snake.tail[i].y = previousSegmentPosition.y;
                 }
 
                 console.log(newTail.length);
 
-                snake.head.x += vector.x / 30;
-                snake.head.y += vector.y / 30;
-                vector.length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+                snake.head.x += vector.x / 60;
+                snake.head.y += vector.y / 60;
                 var newSnake = {newSnake:{head:{x:snake.head.x, y:snake.head.y},tail:newTail}};
-                console.log("emitting new instructions");
+                console.log(Date.now() + " : emitting new instructions");
                 io.emit('instruction',newSnake);
-            } else {
-                console.log("movement completed");
-                clearInterval(movingSnake);
-            }
+            //}
+            //else {
+            //    console.log("movement completed");
+            //    clearInterval(movingSnake);
+            //}
         }, 3/50);
     });
     socket.on('disconnect', function(){
