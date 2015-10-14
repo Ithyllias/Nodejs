@@ -14,12 +14,13 @@ function Snake(headCenter, tailSize){
 
     this.direction = new Point(0,0);
     this.update = function(){
+        for(var i=this.tail.length -1;i >= 0; i--){
+            var previousSegmentPosition = (i == 0 ? this.head : this.tail[i-1]);
+            this.tail[i].x += previousSegmentPosition.x * 2;
+            this.tail[i].y += previousSegmentPosition.y * 2;
+        }
         this.head.x += this.direction.x * 2;
         this.head.y += this.direction.y * 2;
-        for(var i=0;i < this.tail.length; i++){
-            this.tail[i].x += this.direction.x * 2;
-            this.tail[i].y += this.direction.y * 2;
-        }
     };
 }
 
