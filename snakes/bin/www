@@ -97,36 +97,10 @@ function onListening() {
 io = io.listen(server);
 
 io.on('connection', function(socket) {
+    console.log(socket.id);
     socket.on('snake',function(snake){
-        var movingSnake = setInterval(function(){
-            var vector = {x :(snake.target.x - snake.head.x),y :(snake.target.y - snake.head.y)};
-            vector.length = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-            //if(vector.length > 3)
-            //{
-                var newTail = [];
-                for(var i = snake.tail.length - 1; i >= 0; i--){
-                    //Part of the snake that comes before the current one
-                    var previousSegmentPosition = (i == 0 ? snake.head : snake.tail[i-1]);
-
-                    //Creation of new tail coords to send over to client
-                    newTail[i] = {x:previousSegmentPosition.x, y:previousSegmentPosition.y, index:i};
-                    //Update of old tail coordinates into new ones
-                    snake.tail[i].x = previousSegmentPosition.x;
-                    snake.tail[i].y = previousSegmentPosition.y;
-                }
-
-                console.log(newTail.length);
-
-                snake.head.x += vector.x / 60;
-                snake.head.y += vector.y / 60;
-                var newSnake = {newSnake:{head:{x:snake.head.x, y:snake.head.y},tail:newTail}};
-                console.log(Date.now() + " : emitting new instructions");
-                io.emit('instruction',newSnake);
-            //}
-            //else {
-            //    console.log("movement completed");
-            //    clearInterval(movingSnake);
-            //}
+        setInterval(function(){
+            socket.emit("snakes",{snakes : "this is the collection of all the current snakes!"});
         }, 3/50);
     });
     socket.on('disconnect', function(){

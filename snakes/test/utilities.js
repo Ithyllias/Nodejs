@@ -24,6 +24,41 @@ function Utilities(){
         }
     };
 
+    this.assertExpression = function(expression, message, errMessage){
+      if(eval(expression)){
+          console.log("Expected : " + expression);
+          console.log(("Success" + (typeof(message) !== 'undefined' ? " : " + message : "")).success);
+          return true;
+      } else {
+          console.error("Expected : " + expression);
+          console.error(("Failure"+ (typeof(errMessage) !== 'undefined' ? " : " + errMessage : "")).error);
+          return false;
+      }
+    };
+
+    this.multipleAssertExpression = function(){
+        for(var i=0; i < arguments.length; i++){
+            var success = false;
+            var simpleExpression = arguments[i].simpleExpression;
+            var errMessage = arguments[i].errMessage;
+            var message = arguments[i].message;
+
+            console.log(("~~~assert "+ (i + 1) +"~~~").info);
+
+            if (eval(simpleExpression)) {
+                console.log("Validating : " + simpleExpression);
+                console.log(("Success" + (typeof(message) !== 'undefined' ? " : " + message : "")).success);
+                success = true;
+            } else {
+                console.error("Validating : " + simpleExpression);
+                console.error(("Failure" + (typeof(errMessage) !== 'undefined' ? " : " + errMessage : "")).error);
+                success = false;
+            }
+        }
+
+        return success;
+    }
+
     this.multipleAssert = function(){
         for(var i=0; i < arguments.length; i++){
             var success = false;

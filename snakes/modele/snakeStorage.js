@@ -10,6 +10,7 @@ function SnakeStorage(){
     this.add = function(ownerId, snake){
         this.storage.push({ownerId : ownerId, snake :snake});
     };
+
     /*
      * This function will remove from the storage any and all snakes who have the ownerId received in parameter.
      */
@@ -18,6 +19,7 @@ function SnakeStorage(){
           return snake.ownerId !== ownerId;
       });
     };
+
     /*
      * This function will return true if the desired snake is found. Will work with either the OwnerId or the actual Snake object.
      * WARNING: It has to be the exact same Snake in memory, otherwise it will return false regardless of the values of the attributes for the snake
@@ -29,16 +31,25 @@ function SnakeStorage(){
         }
         return false;
     };
+
+    /*
+     *  This function returns the snake that corresponds to the received ownerId or null if it doesn't exist
+     *  WARNING: This will NOT remove the snake from the store!
+     *  ownerId : id of the owner of the desired snake
+     */
+    this.get = function (ownerId) {
+        for (var i in this.storage)
+        {
+            if (this.storage[i].ownerId == ownerId) return this.storage[i].snake;
+        }
+        return null;
+    };
+
     /*
      * This function will update all the snakes in the storage.
-     * Argument format : {ownerId : id, direction : direction}
+     * Argument format : {ownerId : id, direction : {x:x, y:y}}
      */
     this.update = function(){
-        arguments.forEach(function(arg){
-            if(this.storage.contains(arg.ownderId)){
-                //TODO modify the direction of the snake
-            }
-        });
         this.storage.forEach(function(storedItem){
             storedItem.snake.update();
         });
