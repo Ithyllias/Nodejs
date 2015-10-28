@@ -4,9 +4,10 @@
 var point = require("./point");
 var Point = point.Point;
 
-function Snake(headCenter, tailSize){
+function Snake(headCenter, tailSize, color){
     this.head = new Point(headCenter.x, headCenter.y);
     this.tail = [];
+    this.color = (typeof(color) !== 'undefined' ? color : '#000000');
     for(var i=0; i < tailSize; i++){
         var previousSegmentPosition = (i == 0 ? this.head : this.tail[i-1]);
         this.tail[i] = new Point(previousSegmentPosition.x, previousSegmentPosition.y + 25);

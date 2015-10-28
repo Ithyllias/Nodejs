@@ -1,6 +1,9 @@
 /**
  * Created by Matt on 2015-10-14.
  */
+var Util = require("../test/utilities").Utilities;
+var util = new Util();
+
 function SnakeStorage(){
     this.storage = [];
     /*
@@ -10,14 +13,17 @@ function SnakeStorage(){
     this.add = function(ownerId, snake){
         this.storage.push({ownerId : ownerId, snake :snake});
     };
-
     /*
-     * This function will remove from the storage any and all snakes who have the ownerId received in parameter.
+     * This function changes the current direction a snake is heading by his ownerId
+     * Will update any and all snakes with the received ID if there are more than one.
      */
-    this.remove = function(ownerId){
-      this.storage = this.storage.filter(function(snake){
-          return snake.ownerId !== ownerId;
-      });
+    this.changeDirection = function(ownerId, direction){
+        for (var i in this.storage)
+        {
+            if (this.storage[i].ownerId == ownerId && typeof(direction) !== 'undefined') {
+                this.storage[i].snake.direction = direction;
+            }
+        }
     };
 
     /*
@@ -46,6 +52,15 @@ function SnakeStorage(){
     };
 
     /*
+     * This function will remove from the storage any and all snakes who have the ownerId received in parameter.
+     */
+    this.remove = function(ownerId){
+      this.storage = this.storage.filter(function(snake){
+          return snake.ownerId !== ownerId;
+      });
+    };
+
+    /*
      * This function will update all the snakes in the storage.
      * Argument format : {ownerId : id, direction : {x:x, y:y}}
      */
@@ -53,6 +68,30 @@ function SnakeStorage(){
         this.storage.forEach(function(storedItem){
             storedItem.snake.update();
         });
+    };
+
+    /*
+     * This function generates a random color and validates that it is available for a new snake in this storage
+     * before returning it.
+     */
+    this.getNewSnakeColor = function(){
+        var newColor = null;
+        var colorAvailable = false;
+        while(!colorAvailable){
+            newColor = util.getRandomColor();
+            if(this.storage.length > 0){
+                for(var i=0; i < this.storage.length; i++){
+                    if(this.storage[i].snake.color != newColor){
+                        colorAvailable = true;
+                    } else {
+                        colorAvailable = false;
+                    }
+                }
+            } else {
+                colorAvailable = true;
+            }
+        }
+        return newColor;
     };
 }
 

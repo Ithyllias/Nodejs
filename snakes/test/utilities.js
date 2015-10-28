@@ -10,6 +10,21 @@ colors.setTheme({
 });
 
 function Utilities(){
+    /*
+     * This function returns a randomly generated color
+     */
+    this.getRandomColor = function() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    /*
+     * Validates that an expected value is strictly equal to the actual value.
+     */
     this.assert = function(expected, actual, message, errMessage) {
         if (expected === actual) {
             console.log("Expected : " + expected);
@@ -24,6 +39,9 @@ function Utilities(){
         }
     };
 
+    /*
+     * Validates the truth of an expression, successful if expression returns true.
+     */
     this.assertExpression = function(expression, message, errMessage){
       if(eval(expression)){
           console.log("Expected : " + expression);
@@ -36,6 +54,9 @@ function Utilities(){
       }
     };
 
+    /*
+     * Validates multiple expressions, returns true if all expressions returned true.
+     */
     this.multipleAssertExpression = function(){
         for(var i=0; i < arguments.length; i++){
             var success = false;
@@ -59,6 +80,10 @@ function Utilities(){
         return success;
     }
 
+    /*
+     * Validates that an expected value is strictly equal to the actual value for multiple times.
+     * Receives a JSON Object like {expected: expected, actual: actual, message: successMessage, errMessage: errorMessage}
+     */
     this.multipleAssert = function(){
         for(var i=0; i < arguments.length; i++){
             var success = false;

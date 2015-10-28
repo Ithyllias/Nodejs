@@ -8,6 +8,9 @@ var app = require('../app');
 var debug = require('debug')('snakes:server');
 var https = require('https');
 var io = require('socket.io');
+var SnakeStorage = require('../modele/snakeStorage').SnakeStorage;
+var Snake = require('../modele/snake').Snake;
+var Point = require('../modele/point').Point;
 
 /**
  * Get port from environment and store in Express.
@@ -95,15 +98,23 @@ function onListening() {
 }
 
 io = io.listen(server);
+var snakeStore = new SnakeStorage();
 
 io.on('connection', function(socket) {
-    console.log(socket.id);
-    socket.on('snake',function(snake){
-        setInterval(function(){
-            socket.emit("snakes",{snakes : "this is the collection of all the current snakes!"});
-        }, 3/50);
-    });
+    console.log(socket.id + " connected");
+    snakeStore.add(socket.id, new Snake(new Point(100,100), 9,snakeStore.getNewSnakeColor()));
+
+    //setInterval(function(){
+    //    socket.emit("snakes",{snakes : snakeStore.storage});
+    //    socket.on('snake',function(snake){
+    //            snakeStore.changeDirection(socket.id, new Point(snake.direction.x, snake.direction.y));
+    //            snakeStore.update();
+    //            socket.emit("snakes",{snakes : snakeStore.storage});
+    //    });
+    //}, 3/50);
     socket.on('disconnect', function(){
-        console.log('disconnected');
+        snakeStore.remove(socket.id);
+        console.log('client ' + socket.id + ' disconnected');
+        console.log('now down to ' + snakeStore.storage.length + ' snakes');
     });
 });

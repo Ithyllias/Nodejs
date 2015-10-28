@@ -169,4 +169,17 @@ var upS3 = util.assert(true,
 util.multipleAssert({expected : true, actual : upS1, errMessage : "tests for update of S1 with direction (1,1) failed"},
                     {expected : true, actual : upS3, errMessage : "tests for update of S3 with direction (-1,-1) failed"});
 //</editor-fold>
+
+//<editor-fold desc="ChangeDirection">
+console.log("*****test changeDirection*****".method);
+//Pre validation
+util.multipleAssert({expected:1, actual: store.get(1).direction.x}, {expected:1, actual: store.get(1).direction.y});
+store.changeDirection(1, new Point(2,2));
+//Validation that the direction was updated
+util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction was updated in x"}, {expected:2, actual: store.get(1).direction.y, message : "the direction was updated in y"});
+//Validation that undefined will not modify nor throw and error
+store.changeDirection(1);
+util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction wasn't updated in x and no errors were thrown"}, {expected:2, actual: store.get(1).direction.y, message : "the direction wasn't updated in y and no errors were thrown"});
+//</editor-fold>
+
 // </editor-fold>
