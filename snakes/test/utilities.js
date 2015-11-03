@@ -20,7 +20,7 @@ function Utilities(){
             color += letters[Math.floor(Math.random() * 16)];
         }
         return color;
-    }
+    };
 
     /*
      * Validates that an expected value is strictly equal to the actual value.

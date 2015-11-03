@@ -86,6 +86,45 @@ store.add(1,s);
 util.assert(storeSize + 1, store.storage.length);
 //</editor-fold>
 
+//<editor-fold desc="ChangeDirection">
+console.log("*****test changeDirection*****".method);
+//Pre validation
+util.multipleAssert({expected:1, actual: store.get(1).direction.x}, {expected:1, actual: store.get(1).direction.y});
+//Validation that the direction was updated
+store.changeDirection(1, new Point(2,2));
+util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction was updated in x"}, {expected:2, actual: store.get(1).direction.y, message : "the direction was updated in y"});
+//Validation that undefined will not modify nor throw an error
+store.changeDirection(1);
+util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction wasn't updated in x and no errors were thrown"}, {expected:2, actual: store.get(1).direction.y, message : "the direction wasn't updated in y and no errors were thrown"});
+//</editor-fold>
+
+//<editor-fold desc="CheckCollision">
+console.log("*****test checkCollision*****".method);
+var s1 = new Snake(new Point(10,10), 9, '#ff22ff');
+var s2 = new Snake(new Point(100,100), 9, '#aa22ff');
+var secondStore = new Storage();
+
+secondStore.add(1, s1);
+secondStore.add(2, s2);
+//Verification that 2 parallel snakes should not collide
+var result = secondStore.checkCollision(2);
+util.assert(false, result.collided, "no collision detected", "a collision was wrongfully detected");
+
+secondStore.add(3, new Snake(new Point(10,10), 9,'#aaaaaa'));
+//Verification that 2 snakes should collide if created in the same spot and the first one should be removed
+var result = secondStore.checkCollision(3);
+util.assert(true,
+            util.multipleAssert({expected:true, actual:result.collided, errMessage:"no collision detected"},{expected:2, actual:secondStore.storage.length}),
+            "a collision was detected and a snake was removed");
+
+secondStore.add(4, new Snake(new Point(10,100), 9,'#ffffff'));
+//Verification that a snake who's head collides with another's tail should be removed
+var result = secondStore.checkCollision(4);
+util.assert(true,
+    util.multipleAssert({expected:true, actual:result.collided, errMessage:"no collision detected"},{expected:4, actual:result.removedId}),
+    "a collision was detected and the good snake was removed");
+//</editor-fold>
+
 //<editor-fold desc="Contains">
 console.log("*****test contains*****".method);
 //Contains a given snake by the id of the owner
@@ -168,18 +207,6 @@ var upS3 = util.assert(true,
                         "first and last segment work therefore all segment works.", "One or more of the tail tests failed");
 util.multipleAssert({expected : true, actual : upS1, errMessage : "tests for update of S1 with direction (1,1) failed"},
                     {expected : true, actual : upS3, errMessage : "tests for update of S3 with direction (-1,-1) failed"});
-//</editor-fold>
-
-//<editor-fold desc="ChangeDirection">
-console.log("*****test changeDirection*****".method);
-//Pre validation
-util.multipleAssert({expected:1, actual: store.get(1).direction.x}, {expected:1, actual: store.get(1).direction.y});
-store.changeDirection(1, new Point(2,2));
-//Validation that the direction was updated
-util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction was updated in x"}, {expected:2, actual: store.get(1).direction.y, message : "the direction was updated in y"});
-//Validation that undefined will not modify nor throw and error
-store.changeDirection(1);
-util.multipleAssert({expected:2, actual: store.get(1).direction.x, message : "the direction wasn't updated in x and no errors were thrown"}, {expected:2, actual: store.get(1).direction.y, message : "the direction wasn't updated in y and no errors were thrown"});
 //</editor-fold>
 
 // </editor-fold>

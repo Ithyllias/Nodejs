@@ -102,16 +102,23 @@ var snakeStore = new SnakeStorage();
 
 io.on('connection', function(socket) {
     console.log(socket.id + " connected");
-    snakeStore.add(socket.id, new Snake(new Point(100,100), 9,snakeStore.getNewSnakeColor()));
+    snakeStore.add(socket.id, new Snake(new Point((Math.random() * 500),(Math.random() * 500)), 9,snakeStore.getNewSnakeColor()));
+    socket.setMaxListeners(0);
 
-    //setInterval(function(){
-    //    socket.emit("snakes",{snakes : snakeStore.storage});
-    //    socket.on('snake',function(snake){
-    //            snakeStore.changeDirection(socket.id, new Point(snake.direction.x, snake.direction.y));
-    //            snakeStore.update();
-    //            socket.emit("snakes",{snakes : snakeStore.storage});
-    //    });
-    //}, 3/50);
+    setInterval(function(){
+        var collisionObject;
+        socket.emit("snakes",{cages : snakeStore.storage});
+        socket.on('snake',function(snake){
+            snakeStore.changeDirection(socket.id, new Point(snake.direction.x, snake.direction.y));
+            snakeStore.update();
+            collisionObject = snakeStore.checkCollision(socket.id);
+            if(collisionObject.collided == true){
+                console.log("the snake for owner " + collisionObject.removedId + " collided and was thus removed.");
+            }
+            socket.emit("snakes",{cages : snakeStore.storage});
+        });
+    }, 75);
+
     socket.on('disconnect', function(){
         snakeStore.remove(socket.id);
         console.log('client ' + socket.id + ' disconnected');
