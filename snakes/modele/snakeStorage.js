@@ -25,9 +25,11 @@ function SnakeStorage() {
         //var magnitude = Math.sqrt(Math.pow(direction.x,2) + Math.pow(direction.y, 2));
         //var unitVectorX = (direction.x/magnitude);
         //var unitVectorY = (direction.y/magnitude);
-        this.storage.forEach(function (cage) {
-            if (cage.ownerId == ownerId && direction !== 'undefined') { cage.snake.direction = direction; }
-        });
+        if (typeof(direction) !== 'undefined') {
+            this.storage.forEach(function (cage) {
+                if (cage.ownerId == ownerId) { cage.snake.direction = direction; cage.snake.directionModified = true; }
+            });
+        }
     };
 
     /*
@@ -36,25 +38,24 @@ function SnakeStorage() {
     this.checkCollision = function (snakeToCheckId) {
         var collided = false, snakeToCheck = this.get(snakeToCheckId), snakesHeadsDistance, snakesDistance, i, j;
         for (i = 0; i < this.storage.length; i++) {
-            if (snakeToCheckId != this.storage[i].ownerId) {
+            if (snakeToCheck != null && snakeToCheckId != this.storage[i].ownerId) {
                 snakesHeadsDistance = Math.sqrt(Math.pow(snakeToCheck.head.x - this.storage[i].snake.head.x, 2) + Math.pow((snakeToCheck.head.y - this.storage[i].snake.head.y), 2));
-                if (snakesHeadsDistance < 50) {
+                if (snakesHeadsDistance < 50 || (snakeToCheck.head.x + 40 >= 1500 || snakeToCheck.head.x - 40 <= 0 || snakeToCheck.head.y + 40 >= 1000 || snakeToCheck.head.y - 40 <= 0)) {
                     collided = true;
                     this.remove(snakeToCheckId);
-                    break;
+                    return {collided: collided, removedId: snakeToCheckId, color: snakeToCheck.color};
                 }
                 for (j = 0; j < this.storage[i].snake.tail.length; j++) {
                     snakesDistance = Math.sqrt(Math.pow(snakeToCheck.head.x - this.storage[i].snake.tail[j].x, 2) + Math.pow((snakeToCheck.head.y - this.storage[i].snake.tail[j].y), 2));
                     if (snakesDistance < 50) {
                         collided = true;
                         this.remove(snakeToCheckId);
-                        break;
+                        return {collided: collided, removedId: snakeToCheckId, color: snakeToCheck.color};
                     }
                 }
             }
         }
-
-        return {collided: collided, removedId: snakeToCheckId};
+        return {collided: collided};
     };
 
     /*
@@ -74,10 +75,11 @@ function SnakeStorage() {
      *  ownerId : id of the owner of the desired snake
      */
     this.get = function (ownerId) {
+        var returnSnake = null;
         this.storage.forEach(function (cage) {
-            if (cage.ownerId == ownerId) { return cage.snake; }
+            if (cage.ownerId == ownerId) { returnSnake = cage.snake; }
         });
-        return null;
+        return returnSnake;
     };
 
     /*

@@ -47,6 +47,8 @@ util.assert(true,
                                 {expected : TEST_POINT_X, actual: s.tail[8].x, message: " value of x for last segment"},
                                 {expected : TEST_POINT_Y + (DEFAULT_BODY_DIST * TEST_TAIL_SIZE), actual: s.tail[8].y, message: " value of y for last segment"}),
             "first and last segment work therefore all segment works.", "One or more of the head tests failed");
+console.log("  direction".attribute);
+util.multipleAssert({expected: 0, actual: s.direction.x}, {expected: 0, actual: s.direction.y});
 //</editor-fold>
 
 //<editor-fold desc="Update">
@@ -94,6 +96,7 @@ store.changeDirection(1, new Point(2, 2));
 util.multipleAssert({expected: 2, actual: store.get(1).direction.x, message : "the direction was updated in x"}, {expected: 2, actual: store.get(1).direction.y, message : "the direction was updated in y"});
 //Validation that undefined will not modify nor throw an error
 store.changeDirection(1);
+console.log(store.get(1));
 util.multipleAssert({expected: 2, actual: store.get(1).direction.x, message : "the direction wasn't updated in x and no errors were thrown"}, {expected: 2, actual: store.get(1).direction.y, message : "the direction wasn't updated in y and no errors were thrown"});
 //</editor-fold>
 

@@ -1,26 +1,43 @@
 var socket = io();
-//emitter.setMaxListeners(500);
+var snakes = [];
+
 function onMouseDown(event) {
     socket.emit('snake', {'id': socket.id, 'direction': {x: event.point.x, y: event.point.y}});
 }
 
 socket.on('snakes', function (store) {
-    console.log(store.cages);
-    store.cages.forEach(function (cage) {
-        var head = new Path.Circle({
-            center: new Point(cage.snake.head.x, cage.snake.head.y),
-            radius: 40,
-            strokeColor: 'black',
-            fillColor: cage.snake.color
-        }), i;
-        head.smooth();
-        for (i = 0; i < cage.snake.tail.length; i++) {
+    var j, i;
+    for (j = 0; j < store.cages.length; j++) {
+        snakes[j] = [];
+        for (i = 0; i < store.cages[j].snake.tail.length; i++) {
+            snakes[j][i] = {x: store.cages[j].snake.tail[i].x,
+                            y: store.cages[j].snake.tail[i].y,
+                            color: store.cages[j].snake.color};
+        }
+        snakes[j][i] = {x: store.cages[j].snake.head.x,
+                        y: store.cages[j].snake.head.y,
+                        color: store.cages[j].snake.color};
+    }
+});
+
+function onFrame() {
+    project.clear();
+    snakes.forEach(function (snake) {
+        var i;
+        for (i = 0; i < snake.length - 1; i++) {
             new Path.Circle({
-                center: new Point(cage.snake.tail[i].x, cage.snake.tail[i].y),
+                center: new Point(snake[i].x, snake[i].y),
                 radius: 25,
                 strokeColor: 'black',
-                fillColor: cage.snake.color
+                fillColor: snake[i].color
             });
         }
+        new Path.Circle({
+            center: new Point(snake[i].x, snake[i].y),
+            radius: 40,
+            strokeColor: 'black',
+            fillColor: snake[i].color
+        });
     });
-});
+    snakes = [];
+}
