@@ -12014,8 +12014,8 @@ var SVGStyles = Base.each({
 }, {});
 
 var SVGNamespaces = {
-	href: 'http://www.w3.org/1999/xlink',
-	xlink: 'http://www.w3.org/2000/xmlns'
+	href: 'http://www.js.w3.org/1999/xlink',
+	xlink: 'http://www.js.w3.org/2000/xmlns'
 };
 
 new function() {
@@ -12038,7 +12038,7 @@ new function() {
 
 	function createElement(tag, attrs) {
 		return setAttributes(
-			document.createElementNS('http://www.w3.org/2000/svg', tag), attrs);
+			document.createElementNS('http://www.js.w3.org/2000/svg', tag), attrs);
 	}
 
 	function getTransform(matrix, coordinates, center) {
@@ -12390,8 +12390,8 @@ new function() {
 					width: size.width,
 					height: size.height,
 					version: '1.1',
-					xmlns: 'http://www.w3.org/2000/svg',
-					'xmlns:xlink': 'http://www.w3.org/1999/xlink'
+					xmlns: 'http://www.js.w3.org/2000/svg',
+					'xmlns:xlink': 'http://www.js.w3.org/1999/xlink'
 				}),
 				parent = node,
 				matrix = view._matrix;
